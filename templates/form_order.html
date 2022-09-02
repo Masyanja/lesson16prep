@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+</head>
+<body>
+{% for order in all_orders %}
+<p>Наименование: {{order.name}} Описание: {{order.description}}</p>
+<p>Дата начала: {{order.start_date}} Дата окончания: {{order.end_date}}<p/>
+<p>Адрес: {{order.address}} Стоимость:{{order.price}}<p/>
+<p>Заказчик: {{order.customer_id}} Исполнитель: {{order.executor_id}}<p/>
+<p></p>
+{% endfor %}
+
+<form action = "/user_add" method = "post">
+   <p>Наименование<input type = "text" name = "name"><p/>
+   <p>Описание<input type = "text" name = "description"><p/>
+    <p>Дата начала<input type = "text" name = "start_date"><p/>
+    <p>Дата окончания<input type = "text" name = "end_date"><p/>
+    <p>Адрес<input type = "text" name = "address"><p/>
+    <p>Стоимость<input type = "text" name = "price"><p/>
+    <p>Заказчик<input type = "text" name = "customer_id"><p/>
+    <p>Исполнитель<input type = "text" name = "executor_id"><p/>
+    <input type = "submit" value = "Add">
+</form>
+</body>
+</html>

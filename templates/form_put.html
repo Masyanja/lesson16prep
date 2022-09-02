@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+{% for user in all_users %}
+<p>Имя: {{user.first_name}} Фамилия: {{user.last_name}}</p>
+<p>Возраст: {{user.age}} Электронная почта: {{user.email}}<p/>
+<p>Позиция: {{user.role}} Номер телефона:{{phone}}<p/>
+<p></p>
+{% endfor %}
+{{ id }}
+<form action = "/users/{{id}}" enctype="multipart/form-data" method = "put">
+   <p>Имя<input type = "text" name = "first_name"><p/>
+   <p>Фамилия<input type = "text" name = "last_name"><p/>
+    <p>Возраст<input type = "text" name = "age"><p/>
+    <p>Электронная почта<input type = "text" name = "email"><p/>
+    <p>Позиция<input type = "text" name = "role"><p/>
+    <p>Номер телефона<input type = "text" name = "phone"><p/>
+    <input type = "submit" value = "Update">
+</form>
+<form action = "/users/{{id}}" enctype="multipart/form-data" method = "delete">
+    <input type = "submit" value = "Delete">
+</form>
+</body>
+</html>

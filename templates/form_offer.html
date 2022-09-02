@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Отклик на заказ</title>
+</head>
+<body>
+{% for offer in all_offers %}
+<p>Номер заказа: {{offer.order_id}} Исполнитель: {{offer.executor_id}}</p>
+<p></p>
+{% endfor %}
+
+<form action = "/user_add" method = "post">
+   <p>Номер заказа<input type = "text" name = "order_id"><p/>
+   <p>Исполнитель<input type = "text" name = "executor_id"><p/>
+    <input type = "submit" value = "Add">
+</form>
+</body>
+</html>
