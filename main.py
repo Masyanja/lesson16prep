@@ -22,7 +22,7 @@ class User(db.Model):
 
 class Offer(db.Model):
     __tablename__ = 'offer'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     executor_id = db.Column(db.Integer)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     order = db.relationship("Order")
@@ -33,8 +33,8 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     description = db.Column(db.String)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.String)
+    start_date = db.Column(db.String, nullable=True)
+    end_date = db.Column(db.String, nullable=True)
     address = db.Column(db.String(200))
     price = db.Column(db.Integer)
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -73,13 +73,13 @@ def page_index():
     return "Урок 16"
 
 
-@app.route('/users')
+@app.route('/users', methods=["POST", "GET"])
 def get_all_users():
     all_users = db.session.query(User).all()  # нужно получить пользователь при обращении к базе
     return render_template('form.html', all_users=all_users)
 
 
-@app.route('/users/<int:uid>')
+@app.route('/users/<int:uid>', methods=["POST", "GET", "PUT", "DELETE"])
 def get_user_by_id(uid):
     if request.method == "PUT":
         first_name = request.form['first_name']
@@ -98,7 +98,7 @@ def get_user_by_id(uid):
     return render_template('form_put.html', all_users=user, id=uid)
 
 
-@app.route('/user_add', methods=["POST", "GET"])
+@app.route('/user_add', methods=["POST","GET"])
 def added_user():
     if request.method == "POST":
         first_name = request.form['first_name']
@@ -120,7 +120,7 @@ def get_all_orders():
     return render_template('form_order.html', all_orders=all_orders)
 
 
-@app.route('/orders/<int:uid>')
+@app.route('/orders/<int:uid>', methods=["POST", "GET", "PUT", "DELETE"])
 def get_order_by_id(uid):
     if request.method == "PUT":
         name = request.form['name']
@@ -143,20 +143,21 @@ def get_order_by_id(uid):
     return render_template('order_put.html', all_orders=order, id=uid)
 
 
-@app.route('/order_add', methods=["POST"])
+@app.route('/order_add', methods=["POST", "GET"])
 def added_order():
-    name = request.form['name']
-    description = request.form['description']
-    start_date = request.form['start_date']
-    end_date = request.form['end_date']
-    address = request.form['address']
-    price = request.form['price']
-    customer_id = request.form['customer_id']
-    executor_id = request.form['executor_id']
-    order_object_class = Order(name=name, desciption=description, start_date=start_date, end_date=end_date,
+    if request.method == "POST":
+        name = request.form['name']
+        description = request.form['description']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        address = request.form['address']
+        price = request.form['price']
+        customer_id = request.form['customer_id']
+        executor_id = request.form['executor_id']
+        order_object_class = Order(name=name, description=description, start_date=start_date, end_date=end_date,
                                address=address,
                                price=price, customer_id=customer_id, executor_id=executor_id)
-    db.session.add(order_object_class)
+        db.session.add(order_object_class)
     all_orders = db.session.query(Order).all()
     db.session.commit()
     return render_template('form_order.html', all_orders=all_orders)
@@ -168,7 +169,7 @@ def get_all_offers():
     return render_template('form_offer.html', all_offers=all_offers)
 
 
-@app.route('/offers/<int:uid>')
+@app.route('/offers/<int:uid>', methods=["POST", "GET", "PUT", "DELETE"])
 def get_offer_by_id(uid):
     if request.method == "PUT":
         order_id = request.form['order_id']
@@ -183,12 +184,14 @@ def get_offer_by_id(uid):
     return render_template('offer_put.html', all_offers=offer, id=uid)
 
 
-@app.route('/offer_add', methods=["POST"])
+@app.route('/offer_add', methods=["POST", "GET"])
 def added_offer():
-    order_id = request.form['order_id']
-    executor_id = request.form['executor_id']
-    offer_object_class = User(order_id=order_id, executor_id=executor_id)
-    db.session.add(offer_object_class)
+    if request.method == "POST":
+        order_id = request.form['order_id']
+        executor_id = request.form['executor_id']
+        offer_object_class = Offer(order_id=order_id, executor_id=executor_id)
+        db.session.add(offer_object_class)
+        db.session.commit()
     all_offers = db.session.query(Offer).all()
     return render_template('form_offer.html', all_offers=all_offers)
 
